@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fff4ed">
+  <title>একটু তোমার জন্য 🌙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient"></div>
+  <main class="app">
+    <section id="welcome" class="screen active">
+      <div class="sparkle">✦</div>
+      <p class="eyebrow">A little note, just for you</p>
+      <h1>আজ তোমার মনের কথাটা<br><em>একটু বলবে?</em></h1>
+      <p class="sub">তোমার নামটা লিখে শুরু করো। তারপর তোমার অনুভূতির জন্য একটা ছোট্ট কথা অপেক্ষা করছে।</p>
+      <div class="name-box">
+        <input id="nameInput" maxlength="30" autocomplete="name" placeholder="তোমার নাম..." />
+        <button id="startBtn">শুরু করি <span>→</span></button>
+      </div>
+      <p class="signature">— Sandip ♡</p>
+    </section>
+
+    <section id="emotions" class="screen">
+      <button class="back" data-back="welcome">← ফিরে যাই</button>
+      <p class="eyebrow">এই মুহূর্তে</p>
+      <h2 id="helloTitle">তুমি কেমন অনুভব করছো?</h2>
+      <p class="sub">যেটা সবচেয়ে কাছের মনে হচ্ছে, সেটাই বেছে নাও।</p>
+      <div id="emotionGrid" class="emotion-grid"></div>
+      <p class="signature">একটা অনুভূতি, একটা নতুন কথা 🌙</p>
+    </section>
+
+    <section id="note" class="screen">
+      <div class="note-top">
+        <button class="back" data-back="emotions">← অন্যটা বেছে নিই</button>
+        <span id="emotionBadge" class="badge"></span>
+      </div>
+      <div class="paper">
+        <div class="paper-mark">❝</div>
+        <p class="eyebrow">আজকের ছোট্ট চিঠি</p>
+        <h2 id="noteGreeting"></h2>
+        <p id="noteText" class="note-text"></p>
+        <p id="noteSign" class="note-sign">— Sandip ♡</p>
+      </div>
+      <div class="actions">
+        <button id="anotherBtn" class="secondary">আরও একটা কথা শুনি ✨</button>
+        <button id="heartBtn" class="primary">এইটুকু আমার জন্য →</button>
+      </div>
+      <p id="aiStatus" class="tiny"></p>
+    </section>
+
+    <section id="final" class="screen">
+      <div id="animationStage" class="animation-stage">
+        <div id="balloons"></div>
+        <div id="hearts"></div>
+        <div class="teddy" id="teddy" aria-label="cute dancing teddy">🧸</div>
+        <div class="giant-heart" id="giantHeart">♥</div>
+      </div>
+      <div class="final-card">
+        <p class="eyebrow">শুধু তোমার জন্য</p>
+        <h2 id="finalTitle"></h2>
+        <p id="finalText"></p>
+        <button id="againBtn" class="primary">আবার শুরু করি ↺</button>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
