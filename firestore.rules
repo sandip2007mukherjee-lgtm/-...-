@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'sandip2007mukherjee@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+
+    // Public page can log anonymous activity. Admin can read/manage it.
+    match /activities/{id} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Content/settings are public-readable for the main page, admin-writable.
+    match /emotions/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /notes/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /settings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emotion Note — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="loginView" class="center"><div class="card login"><div class="brand">✦ Emotion Note</div><h1>Admin Panel</h1><p>শুধু অনুমোদিত Admin account দিয়ে ঢুকুন।</p><input id="email" type="email" placeholder="Admin email"><input id="password" type="password" placeholder="Password"><button id="loginBtn">Login →</button><p id="loginMsg" class="msg"></p></div></div>
+<div id="appView" class="hidden"><header><div><div class="brand">✦ Emotion Note</div><h1>Admin Dashboard</h1><p id="adminEmail"></p></div><button id="logoutBtn" class="ghost">Logout</button></header>
+<main>
+<section class="stats"><div class="stat"><span>👤 Users</span><b id="usersCount">0</b></div><div class="stat"><span>💌 Notes viewed</span><b id="notesCount">0</b></div><div class="stat"><span>❤️ Final button</span><b id="finalCount">0</b></div><div class="stat"><span>🧸 Animations</span><b id="animationCount">0</b></div></section>
+<section class="panel"><div class="panelHead"><h2>Recent Activity</h2><button id="refreshBtn" class="small">Refresh</button></div><div class="tableWrap"><table><thead><tr><th>Name</th><th>Emotion</th><th>Action</th><th>Time</th></tr></thead><tbody id="activityBody"><tr><td colspan="4">Loading…</td></tr></tbody></table></div></section>
+<section class="grid2"><div class="panel"><h2>⚙️ Settings</h2><label>Final message</label><textarea id="finalMessage" rows="4" placeholder="Final message..."></textarea><label>Animation intensity</label><select id="intensity"><option value="soft">Soft</option><option value="medium">Medium</option><option value="high">High</option></select><button id="saveSettings">Save settings</button><p id="saveMsg" class="msg"></p></div>
+<div class="panel"><h2>💭 Emotions</h2><div id="emotionList"></div><button id="addEmotion" class="secondary">+ Add emotion</button><p class="hint">এগুলো Firestore-এর <b>emotions</b> collection-এ রাখা হবে।</p></div></section>
+</main></div>
+<script type="module" src="admin.js"></script>
+</body></html>
