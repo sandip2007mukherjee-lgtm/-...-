@@ -2,12 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "PASTE_FIREBASE_API_KEY",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk",
+  authDomain: "workshop-c2bd7.firebaseapp.com",
+  projectId: "workshop-c2bd7",
+  storageBucket: "workshop-c2bd7.firebasestorage.app",
+  messagingSenderId: "813904771823",
+  appId: "1:813904771823:web:35c19cf502b6dd8e1a791a",
+  measurementId: "G-LPFNGZPEDZ"
 };
 
 let db = null;

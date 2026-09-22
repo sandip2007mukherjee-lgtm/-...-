@@ -52,3 +52,8 @@ Admin-এ data দেখানোর সময় Firebase Authentication + Firesto
 
 ## 7) Customization
 `emotions` array এবং `localNotes` এখন code-এ আছে। পরের ধাপে এগুলো Firestore `settings` collection-এ নিয়ে গেলে Admin Panel থেকে code না ছুঁয়েই edit করা যাবে।
+
+
+## Current Firebase project
+Project ID: `workshop-c2bd7`
+Firestore: default database created in Test mode.
