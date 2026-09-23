@@ -1,9 +1,16 @@
 {
   "name": "emotion-note-functions",
-  "private": true,
-  "engines": {"node": "20"},
+  "description": "AI backend for Emotion Note",
+  "scripts": {
+    "start": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^13.0.0",
-    "firebase-functions": "^6.0.0"
-  }
+    "firebase-functions": "^7.0.0"
+  },
+  "private": true
 }
