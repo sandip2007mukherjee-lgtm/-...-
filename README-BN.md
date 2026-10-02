@@ -1,6 +1,6 @@
 # Emotion Note — Admin Panel
 
-Firebase project: `workshop-c2bd7`
+Firebase project: `workshop-c2bd7-f5b7a`
 Admin email: `sandip2007mukherjee@gmail.com`
 
 ## প্রথমবার
@@ -19,4 +19,4 @@ Email/Password login শুধু UI gate নয়; Firestore rules-এ verified a
 
 
 ## Firebase config update
-এই build-এ Firebase project `workshop-c2bd7` এবং দেওয়া Web App API key ব্যবহার করা হয়েছে।
+এই build-এ Firebase project `workshop-c2bd7-f5b7a` এবং দেওয়া Web App API key ব্যবহার করা হয়েছে।

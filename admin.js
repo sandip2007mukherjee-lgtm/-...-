@@ -3,7 +3,16 @@ import { getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPassw
 import { getFirestore,collection,getDocs,query,orderBy,limit,doc,getDoc,setDoc,addDoc,deleteDoc,serverTimestamp,onSnapshot,writeBatch } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const ADMIN_EMAIL="sandip2007mukherjee@gmail.com";
-const firebaseConfig={apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk",authDomain:"workshop-c2bd7.firebaseapp.com",projectId:"workshop-c2bd7",storageBucket:"workshop-c2bd7.firebasestorage.app",messagingSenderId:"813904771823",appId:"1:813904771823:web:35c19cf502b6dd8e1a791a"};
+const firebaseConfig = {
+  apiKey: "AIzaSyDD1UxOiLgMO0J5BV9F9uV-2GtzzbRoZ9s",
+  authDomain: "workshop-c2bd7-f5b7a.firebaseapp.com",
+  databaseURL: "https://workshop-c2bd7-f5b7a-default-rtdb.firebaseio.com",
+  projectId: "workshop-c2bd7-f5b7a",
+  storageBucket: "workshop-c2bd7-f5b7a.firebasestorage.app",
+  messagingSenderId: "433148066548",
+  appId: "1:433148066548:web:3709587b89e7760bb8fca1",
+  measurementId: "G-67C2GGL0L1"
+};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id); const esc=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 let unsubActivity=null,unsubPresence=null,activities=[],presence=[],usersMap=new Map(),currentUser=null,notesCache=[];

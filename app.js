@@ -2,9 +2,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk", authDomain:"workshop-c2bd7.firebaseapp.com",
-  projectId:"workshop-c2bd7", storageBucket:"workshop-c2bd7.firebasestorage.app",
-  messagingSenderId:"813904771823", appId:"1:813904771823:web:35c19cf502b6dd8e1a791a", measurementId:"G-LPFNGZPEDZ"
+  apiKey: "AIzaSyDD1UxOiLgMO0J5BV9F9uV-2GtzzbRoZ9s",
+  authDomain: "workshop-c2bd7-f5b7a.firebaseapp.com",
+  databaseURL: "https://workshop-c2bd7-f5b7a-default-rtdb.firebaseio.com",
+  projectId: "workshop-c2bd7-f5b7a",
+  storageBucket: "workshop-c2bd7-f5b7a.firebasestorage.app",
+  messagingSenderId: "433148066548",
+  appId: "1:433148066548:web:3709587b89e7760bb8fca1",
+  measurementId: "G-67C2GGL0L1"
 };
 const db = getFirestore(initializeApp(firebaseConfig));
 
