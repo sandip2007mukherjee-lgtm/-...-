@@ -3,7 +3,7 @@ import { getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPassw
 import { getFirestore,collection,getDocs,query,orderBy,limit,doc,getDoc,setDoc,addDoc,deleteDoc,serverTimestamp,onSnapshot,writeBatch } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const ADMIN_EMAIL="sandip2007mukherjee@gmail.com";
-const firebaseConfig={apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk4",authDomain:"workshop-c2bd7.firebaseapp.com",projectId:"workshop-c2bd7",storageBucket:"workshop-c2bd7.firebasestorage.app",messagingSenderId:"813904771823",appId:"1:813904771823:web:35c19cf502b6dd8e1a791a"};
+const firebaseConfig={apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk",authDomain:"workshop-c2bd7.firebaseapp.com",projectId:"workshop-c2bd7",storageBucket:"workshop-c2bd7.firebasestorage.app",messagingSenderId:"813904771823",appId:"1:813904771823:web:35c19cf502b6dd8e1a791a"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id); const esc=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 let unsubActivity=null,unsubPresence=null,activities=[],presence=[],usersMap=new Map(),currentUser=null,notesCache=[];
