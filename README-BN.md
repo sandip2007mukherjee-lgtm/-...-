@@ -16,3 +16,7 @@ Admin email: `sandip2007mukherjee@gmail.com`
 বর্তমান dashboard `activities`, `emotions`, `notes`, `settings` collections ব্যবহার করে। Existing main page-এর activity collection যদি অন্য নামে থাকে, `admin.js`-এর collection name একই করতে হবে।
 
 Email/Password login শুধু UI gate নয়; Firestore rules-এ verified admin email-ও check করা হয়েছে।
+
+
+## Firebase config update
+এই build-এ Firebase project `workshop-c2bd7` এবং দেওয়া Web App API key ব্যবহার করা হয়েছে।

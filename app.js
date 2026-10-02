@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk8", authDomain:"workshop-c2bd7.firebaseapp.com",
+  apiKey:"AIzaSyCrfUkI-ZE1jQ160INFxcUxhUwSiDvZbbk4", authDomain:"workshop-c2bd7.firebaseapp.com",
   projectId:"workshop-c2bd7", storageBucket:"workshop-c2bd7.firebasestorage.app",
   messagingSenderId:"813904771823", appId:"1:813904771823:web:35c19cf502b6dd8e1a791a", measurementId:"G-LPFNGZPEDZ"
 };
