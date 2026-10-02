@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import { getFirestore,collection,getDocs,query,orderBy,limit,doc,getDoc,setDoc,addDoc,deleteDoc,serverTimestamp,onSnapshot,writeBatch } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const ADMIN_EMAIL="sandip2007mukherjee@gmail.com";
@@ -11,8 +11,9 @@ const emotionDefaults=[
 ["sad","🥺","মন খারাপ"],["alone","😔","একা লাগছে"],["hurt","💔","কষ্ট পেয়েছি"],["care","🫂","একটু আদর দরকার"],["miss","❤️","কাউকে মনে পড়ছে"],["quiet","🌙","চুপচাপ থাকতে ইচ্ছে করছে"],["happy","😊","ভালো আছি"],["love","🥰","প্রেমে আছি"],["fresh","✨","নতুন করে শুরু করতে চাই"],["cute","🌸","একটা সুন্দর কথা চাই"]
 ];
 
-$("loginBtn").onclick=async()=>{const email=$("email").value.trim().toLowerCase(),password=$("password").value;if(email!==ADMIN_EMAIL){$("loginMsg").textContent="এই email-টি Admin নয়।";return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){$("loginMsg").textContent="Login failed: "+(e.code||e.message)}};
+$("loginBtn").onclick=async()=>{const email=$("email").value.trim().toLowerCase(),password=$("password").value;if(email!==ADMIN_EMAIL){$("loginMsg").textContent="এই email-টি Admin নয়।";return}try{await signInWithEmailAndPassword(auth,email,password)}catch(e){$("loginMsg").textContent=({"auth/invalid-credential":"Email/password ভুল, অথবা Firebase-এ account নেই।","auth/operation-not-allowed":"Firebase Console-এ Email/Password sign-in enable করতে হবে।","auth/too-many-requests":"অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।"}[e.code]||("Login failed: "+(e.code||e.message)))}};
 $("logoutBtn").onclick=()=>signOut(auth);
+$("resetBtn").onclick=async()=>{const email=$("email").value.trim().toLowerCase();if(!email){$("loginMsg").textContent="আগে admin email লিখুন।";return}try{await sendPasswordResetEmail(auth,email);$("loginMsg").textContent="Password reset email পাঠানো হয়েছে।"}catch(e){$("loginMsg").textContent="Reset failed: "+(e.code||e.message)}};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 $("closeUser").onclick=()=>$("userModal").classList.add("hidden");
 $("refreshBtn").onclick=()=>loadSnapshotData();
@@ -41,6 +42,10 @@ function renderAll(){
   [...activities,...presence].forEach(x=>{if(!x.sessionId)return;const old=users.get(x.sessionId)||{};users.set(x.sessionId,{...old,...x,lastSeen:x.lastSeen||old.lastSeen})});
   usersMap=users;
   $("usersCount").textContent=users.size;$("onlineCount").textContent=live.length;$("notesCount").textContent=activities.filter(x=>x.event==="note_viewed").length;$("finalCount").textContent=activities.filter(x=>x.event==="animation_triggered").length;
+  const latest=activities[0];
+  if(latest){$("liveNowTitle").textContent=latest.name||"Anonymous";$("liveNowText").textContent=`${eventLabel(latest.event)} • ${latest.emotionLabel||"—"} • ${fmt(latest.createdAt)}`;}
+  const emo={};activities.filter(x=>x.event==="emotion_selected").forEach(x=>{if(x.emotionLabel)emo[x.emotionLabel]=(emo[x.emotionLabel]||0)+1});
+  const top=Object.entries(emo).sort((a,b)=>b[1]-a[1])[0]; if(top){$("topEmotion").textContent=top[0];$("topEmotionText").textContent=`${top[1]} recent selection${top[1]===1?"":"s"}`;}
   $("activityBody").innerHTML=activities.slice(0,60).map(x=>`<tr><td><button class="userLink" data-session="${esc(x.sessionId)}">${esc(x.name||"Anonymous")}</button></td><td>${esc(x.emotionLabel||x.emotion||"-")}</td><td><span class="eventTag">${esc(eventLabel(x.event))}</span></td><td>${fmt(x.createdAt)}</td></tr>`).join("")||`<tr><td colspan="4">No activity yet.</td></tr>`;
   document.querySelectorAll(".userLink").forEach(b=>b.onclick=()=>openUser(b.dataset.session));
   const liveSorted=[...users.values()].sort((a,b)=>(b.lastSeen?.toMillis?.()||0)-(a.lastSeen?.toMillis?.()||0));
@@ -99,10 +104,23 @@ async function ensureSeeded(){
   if(missing) await seedAllNotes(true);
 }
 async function seedAllNotes(silent=false){
-  const existing=await getDocs(collection(db,"notes"));const counts={};existing.forEach(d=>{const e=d.data().emotionId;counts[e]=(counts[e]||0)+1});
-  const batch=writeBatch(db);let total=0;
-  for(const e of emotionDefaults){const id=e[0],need=Math.max(0,50-(counts[id]||0));for(let i=0;i<need;i++){const intro=seedParts[id][i%10],end=seedEnds[i%5],text=`{name}, ${intro}. ${end}`;const ref=doc(collection(db,"notes"));batch.set(ref,{emotionId:id,text,active:true,createdAt:serverTimestamp(),seeded:true});total++}}
-  if(total){await batch.commit();if(!silent)$("seedMsg").textContent=`${total}টি note তৈরি হয়েছে ✓`;await loadNotes()}else if(!silent)$("seedMsg").textContent="সব emotion-এ ৫০টি note ইতিমধ্যেই আছে ✓";
+  const existing=await getDocs(collection(db,"notes"));
+  const docs=existing.docs.map(d=>({ref:d.ref,id:d.id,...d.data()}));
+  const batch=writeBatch(db); let added=0, removed=0;
+  for(const e of emotionDefaults){
+    const id=e[0]; const mine=docs.filter(n=>n.emotionId===id && n.active!==false); const seenText=new Set();
+    for(const n of mine){
+      if(seenText.has(n.text) && n.seeded===true){batch.delete(n.ref);removed++;} else if(n.text) seenText.add(n.text);
+    }
+    const uniqueCount=seenText.size; const need=Math.max(0,50-uniqueCount);
+    for(let i=0;i<need;i++){
+      const idx=uniqueCount+i, intro=seedParts[id][idx%10], end=seedEnds[Math.floor(idx/10)%5];
+      const text=`{name}, ${intro}. ${end}`; const ref=doc(collection(db,"notes"));
+      batch.set(ref,{emotionId:id,text,active:true,createdAt:serverTimestamp(),seeded:true,index:idx}); added++;
+    }
+  }
+  if(added||removed){await batch.commit();if(!silent)$("seedMsg").textContent=`${added}টি নতুন note + ${removed}টি duplicate cleanup ✓`;await loadNotes();}
+  else if(!silent)$("seedMsg").textContent="সব emotion-এ ৫০টি unique note প্রস্তুত ✓";
 }
 async function loadEmotions(){
   const snap=await getDocs(collection(db,"emotions"));$("emotionManage").innerHTML="";

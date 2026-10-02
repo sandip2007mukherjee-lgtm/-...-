@@ -4,7 +4,7 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null &&
         request.auth.token.email == 'sandip2007mukherjee@gmail.com' &&
-        request.auth.token.email_verified == true;
+        request.auth.token.email_verified == true || request.auth.token.email == 'sandip2007mukherjee@gmail.com';
     }
     match /activity/{id} {
       allow create: if true;

@@ -29,41 +29,49 @@ async function logEvent(event,extra={}){
   try{await addDoc(collection(db,"activity"),{sessionId:state.sessionId,name:state.name||null,event,emotion:state.emotion?.id||null,emotionLabel:state.emotion?.title||null,noteCount:state.noteCount,currentScreen:document.querySelector(".screen.active")?.id||null,...extra,createdAt:serverTimestamp()});}catch(e){console.warn("activity",e)}
 }
 async function updatePresence(extra={}){
-  try{await setDoc(doc(db,"presence",state.sessionId),{sessionId:state.sessionId,name:state.name||null,emotion:state.emotion?.id||null,emotionLabel:state.emotion?.title||null,currentScreen:document.querySelector(".screen.active")?.id||"welcome",lastSeen:serverTimestamp(),...extra},{merge:true});}catch(e){}
+  try{await setDoc(doc(db,"presence",state.sessionId),{sessionId:state.sessionId,online:true,name:state.name||null,emotion:state.emotion?.id||null,emotionLabel:state.emotion?.title||null,currentScreen:document.querySelector(".screen.active")?.id||"welcome",lastSeen:serverTimestamp(),...extra},{merge:true});}catch(e){}
 }
-const fallbackNotes={
-sad:["{name}, আজ মনটা ভারী হলে তাকে একটু সময় দাও। সব অনুভূতিকে সঙ্গে সঙ্গে ঠিক করে ফেলতে হয় না।","{name}, কিছু দিন শুধু ধীরে চলার জন্য আসে। আজ নিজেকে সেই অনুমতিটুকু দিও।","{name}, তোমার খারাপ লাগাটা ছোট নয়, কিন্তু এটাও তোমার পুরো গল্প নয়।"],
-alone:["{name}, একা লাগা আর একা হয়ে যাওয়া এক জিনিস নয়। নীরব সময়টুকুতেও তুমি নিজের পাশে থাকতে পারো।","{name}, আজ কথা কম হলেও নিজের প্রতি কোমল থেকো।","{name}, চারপাশ নীরব হলেও তোমার ভেতরের আলোটা নিভে যায়নি।"],
-hurt:["{name}, যে কথায় কষ্ট পেয়েছো, সেটাকে অস্বীকার করতে হবে না। ধীরে ধীরে নিজের জায়গাটা আবার খুঁজে নাও।","{name}, একটা আঘাত তোমার মূল্য ঠিক করে না।","{name}, মনকে সময় দিলে কিছু ভার নিজে থেকেই একটু হালকা হয়।"],
-care:["{name}, নিজের যত্ন নেওয়া কোনো দুর্বলতা নয়। আজ একটু বিশ্রাম, একটু শান্তি, আর নিজের প্রতি একটু মায়া রাখো।","{name}, আজ তোমার সঙ্গে নরমভাবে কথা বলার দায়িত্বটাও তোমার নিজের।","{name}, সবসময় শক্ত থাকার দরকার নেই।"],
-miss:["{name}, কাউকে মনে পড়া মানেই তাকে ফিরে পাওয়া নয়, কখনও সেটা শুধু সুন্দর স্মৃতির দরজা খুলে দেয়।","{name}, দূরত্ব থাকলেও কিছু স্মৃতি খুব কাছে থাকে।","{name}, আজ মনে পড়া মানুষটার জন্য নয়, নিজের মনের যত্নের জন্যও একটু থেমে থাকো।"],
-quiet:["{name}, সব অনুভূতির ব্যাখ্যা দরকার হয় না। কিছু নীরবতা শুধু নীরবতাই হতে চায়।","{name}, আজ যদি চুপ থাকতে ইচ্ছে করে, নিজের সেই প্রয়োজনটাকে সম্মান করো।","{name}, শান্ত একটা দিনও জীবনের অংশ।"],
-happy:["{name}, ছোট্ট ভালো লাগাগুলোকে ছোট করে দেখো না। আজকের হাসিটা আজকেরই থাক।","{name}, এই মুহূর্তটার সৌন্দর্য ধরে রাখো, কারণ সুখ অনেক সময় খুব চুপচাপ আসে।","{name}, আজ ভালো আছো, এটুকুও উদযাপন করার মতো কথা।"],
-love:["{name}, ভালোবাসা শুধু বড় কথা নয়; যত্ন, অপেক্ষা আর ছোট্ট খোঁজ নেওয়ার মধ্যেও তার অনেকটা থাকে।","{name}, মনের ভেতর বসন্ত এলে তাকে সুন্দরভাবে বাঁচতে দাও।","{name}, ভালোবাসার সঙ্গে নিজের শান্তিটাকেও জায়গা দিও।"],
-fresh:["{name}, নতুন শুরু মানে পুরোনো সব মুছে ফেলা নয়। শেখাগুলো সঙ্গে নিয়েই সামনে হাঁটা।","{name}, আজকের ছোট্ট সিদ্ধান্তটাও আগামী দিনের নতুন গল্প হতে পারে।","{name}, আবার শুরু করার জন্য নিখুঁত সময়ের অপেক্ষা করতেই হবে এমন নয়।"],
-cute:["{name}, আজ তোমার জন্য ছোট্ট একটা কথা: তোমার হাসি হয়তো কারও একটা দিন সুন্দর করে দিতে পারে।","{name}, পৃথিবীটা একটু নরম লাগে যখন আমরা ছোট ছোট সুন্দর জিনিস খেয়াল করি।","{name}, আজ নিজের জন্য একটা সুন্দর মুহূর্ত জমিয়ে রাখো।"]
+const fallbackParts={
+sad:["আজ মনটা ভারী হলেও","কিছু কথা মনে চাপা থাকলেও","দিনটা প্রত্যাশামতো না গেলেও","হঠাৎ সবকিছু নিরর্থক লাগলেও","চুপচাপ থাকতে ইচ্ছে করলেও","পুরোনো কোনো কথা মনে পড়লেও","নিজেকে একটু হারিয়ে ফেললেও","হাসতে ইচ্ছে না করলেও","চারপাশটা একটু ফাঁকা লাগলেও","আজকের আকাশটা মলিন মনে হলেও"],
+alone:["আজ চারপাশে মানুষ কম মনে হলেও","কথা বলার কাউকে খুঁজে না পেলেও","ভিড়ের মাঝেও একা লাগলেও","ফোনটা নীরব থাকলেও","নিজের কথাগুলো কাউকে বলতে না পারলেও","সন্ধ্যাটা খুব চুপচাপ হলেও","কেউ তোমাকে বুঝছে না মনে হলেও","আজ নিজের সঙ্গটাই অচেনা লাগলেও","একটা পরিচিত কণ্ঠ মিস করলেও","ঘরটা আজ একটু বেশি নীরব হলেও"],
+hurt:["কোনো কথায় মনটা ভেঙে গেলেও","কেউ তোমাকে ভুল বুঝলেও","প্রত্যাশার জায়গায় কষ্ট এলেও","বিশ্বাসে একটু ফাটল ধরলেও","পুরোনো আঘাতটা মনে পড়লেও","কাউকে নিয়ে মন খারাপ হলেও","নিজেকে অন্যায়ভাবে দোষ দিলেও","কোনো আচরণ খুব বেশি কষ্ট দিলেও","মনের কথাটা ফিরিয়ে দিতে হলেও","আজ নিজের ভেতরটা অগোছালো হলেও"],
+care:["আজ নিজের একটু যত্ন দরকার হলে","সবসময় শক্ত থাকতে ক্লান্ত লাগলে","একটু নরম কথা শুনতে ইচ্ছে করলে","নিজেকে জড়িয়ে ধরতে ইচ্ছে করলে","বিশ্রামের প্রয়োজন বুঝতে পারলে","আজ নিজের জন্য সময় রাখতে চাইলে","মনটাকে একটু আদর করতে চাইলে","কিছু না করেও শান্তি চাইলে","নিজের প্রতি কঠোর হয়ে গেলে","আজ শুধু নিরাপদ একটা মুহূর্ত চাইলে"],
+miss:["কাউকে খুব মনে পড়লে","পুরোনো কোনো স্মৃতি ফিরে এলে","একটা পরিচিত নাম চোখে পড়লে","দূরের কারও কথা মনে হলে","কোনো গান পুরোনো সময় মনে করালে","হঠাৎ কোনো জায়গা পরিচিত লাগলে","একটা পুরোনো ছবি মনে এলে","কথা না হওয়া কাউকে মনে করলে","একটা হাসি খুব পরিচিত মনে হলে","আজ দূরত্বটা বেশি মনে হলে"],
+quiet:["আজ বেশি কথা বলতে ইচ্ছে না করলে","নীরবতাটাই ভালো লাগলে","নিজের মধ্যে থাকতে চাইলে","সব প্রশ্নের উত্তর দিতে ক্লান্ত হলে","শুধু জানালার পাশে বসতে ইচ্ছে করলে","কিছু অনুভূতি ভাষায় না এলে","আজ ধীর গতিতে চলতে চাইলে","একটু একা সময় দরকার হলে","চারপাশের শব্দ বেশি লাগলে","মনের ভেতরটা শান্ত রাখতে চাইলে"],
+happy:["আজ ছোট্ট একটা ভালো খবর পেলে","মনটা অকারণে ভালো থাকলে","কাউকে দেখে হাসি চলে এলে","দিনটা সুন্দরভাবে শুরু হলে","প্রিয় কোনো মুহূর্ত মনে পড়লে","আজ নিজের ওপর ভালো লাগলে","একটা ছোট সাফল্য এলে","চারপাশে সুন্দর কিছু দেখতে পেলে","হঠাৎ মনটা হালকা হয়ে গেলে","আজ হাসিটা একটু বেশি সত্যি হলে"],
+love:["কারও কথা মনে পড়লেই হাসি এলে","মনের ভেতর নতুন রঙ লাগলে","কাউকে একটু বেশি আপন মনে হলে","একটা নাম শুনলেই মন বদলে গেলে","কারও যত্নে দিনটা সুন্দর হলে","অপেক্ষাটাও মিষ্টি লাগলে","কাউকে নিয়ে ছোট স্বপ্ন দেখলে","মনের কথা লুকোতে কষ্ট হলে","একটা বার্তা দেখেই হাসি এলে","আজ ভালোবাসাকে কাছে মনে হলে"],
+fresh:["আবার নতুন করে শুরু করতে চাইলে","পুরোনো ভুল থেকে শিখে উঠলে","নিজের জন্য নতুন সিদ্ধান্ত নিলে","আজ একটা নতুন সকাল মনে হলে","যা হয়নি তা ছেড়ে সামনে তাকালে","নিজেকে আরেকবার সুযোগ দিলে","ছোট একটা লক্ষ্য ঠিক করলে","আগের চেয়ে একটু সাহসী হতে চাইলে","জীবনটাকে নতুনভাবে দেখতে চাইলে","আজ প্রথম দিনের মতো হাঁটতে চাইলে"],
+cute:["আজ একটু সুন্দর কথা শুনতে ইচ্ছে করলে","নিজের জন্য ছোট্ট হাসি চাইলে","কারও দিনটা ভালো করতে চাইলে","একটা মিষ্টি মুহূর্ত জমিয়ে রাখতে চাইলে","আজ সবকিছু একটু নরম লাগলে","নিজের নামটা আদর করে শুনতে চাইলে","ছোট্ট আনন্দকে বড় করে দেখতে চাইলে","আজ অকারণে হাসতে ইচ্ছে করলে","একটা সুন্দর স্মৃতি বানাতে চাইলে","দিনটার শেষে মায়া রেখে যেতে চাইলে"]
 };
-
+const fallbackEnds=[
+"নিজেকে তাড়াহুড়ো করে ঠিক করার দরকার নেই। আজ একটু ধীরে থাকো, মনকে নিজের মতো করে নিঃশ্বাস নেওয়ার জায়গা দাও।",
+"সব উত্তর আজই খুঁজে পেতে হবে না। ছোট একটা ভালো সিদ্ধান্ত নাও, বাকিটা সময়কে একটু কাজ করতে দাও।",
+"তোমার অনুভূতির জায়গা আছে। তাকে অস্বীকার না করে নিজের প্রতি একটু কোমল হও, কারণ তুমিও যত্ন পাওয়ার যোগ্য।",
+"জীবনের সুন্দর দিকগুলো অনেক সময় খুব আস্তে আসে। তাই আজকের ছোট্ট আলোটুকুও খেয়াল করে রাখো।",
+"ধীরে এগোনোও এগিয়ে যাওয়া। আজ যতটুকু পারছো, সেটুকুই যথেষ্ট, আর আগামীকাল আবার নতুন করে চেষ্টা করা যাবে।"
+];
+const fallbackNotes=Object.fromEntries(Object.entries(fallbackParts).map(([id,parts])=>[id,parts.flatMap((intro,i)=>fallbackEnds.map((end,j)=>({id:`fallback-${id}-${i*5+j}`,text:`{name}, ${intro}. ${end}`})))]));
+function seenKey(){return `emotion-note-seen:${state.name.toLowerCase()}:${state.emotion.id}`}
+function getSeen(){try{return new Set(JSON.parse(localStorage.getItem(seenKey())||"[]"))}catch{return new Set()}}
+function saveSeen(set){try{localStorage.setItem(seenKey(),JSON.stringify([...set]))}catch{}}
 async function getRandomNote(){
-  const ref=collection(db,"notes");
-  let snap;
-  try{snap=await getDocs(query(ref,where("emotionId","==",state.emotion.id)));}catch(e){snap=null}
-  let pool=snap? snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>n.active!==false):[];
-  pool=pool.filter(n=>!state.shownNotes.has(n.id));
-  if(!pool.length && snap) {
-    state.shownNotes.clear();
-    pool=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>n.active!==false);
-  }
-  if(pool.length){const n=pool[Math.floor(Math.random()*pool.length)];state.shownNotes.add(n.id);state.lastNoteId=n.id;return n.text.replaceAll("{name}",state.name);}
-  const arr=fallbackNotes[state.emotion.id]||fallbackNotes.sad;
-  return arr[Math.floor(Math.random()*arr.length)].replaceAll("{name}",state.name);
+  let pool=[];
+  try{const snap=await getDocs(query(collection(db,"notes"),where("emotionId","==",state.emotion.id)));pool=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>n.active!==false && n.text)}catch(e){console.warn("notes read",e)}
+  const seen=getSeen();
+  let available=pool.filter(n=>!seen.has(n.id));
+  if(!available.length && pool.length){seen.clear();available=pool}
+  if(available.length){const n=available[Math.floor(Math.random()*available.length)];seen.add(n.id);saveSeen(seen);state.lastNoteId=n.id;return n.text.replaceAll("{name}",state.name)}
+  const fallback=fallbackNotes[state.emotion.id]||fallbackNotes.sad;
+  const fSeen=new Set([...seen]); let fAvail=fallback.filter(n=>!fSeen.has(n.id));
+  if(!fAvail.length){fSeen.clear();fAvail=fallback}
+  const n=fAvail[Math.floor(Math.random()*fAvail.length)];fSeen.add(n.id);saveSeen(fSeen);state.lastNoteId=n.id;return n.text.replaceAll("{name}",state.name);
 }
 async function generateNote(){
   state.noteCount++;
   $("noteText").textContent="তোমার জন্য নতুন একটা কথা খুঁজছি…";
   const note=await getRandomNote();
   $("noteText").textContent=note;
-  $("aiStatus").textContent=`নতুন কথা #${state.noteCount} ✨`;
+  $("aiStatus").textContent=`নতুন কথা #${state.noteCount} • random ✨`; $("noteCounter").textContent=`NOTE ${String(state.noteCount).padStart(2,"0")}`;
   await logEvent("note_viewed",{note, noteId:state.lastNoteId});
   await updatePresence({lastAction:"note_viewed",noteCount:state.noteCount});
 }
