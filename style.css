@@ -2,3 +2,84 @@
 /* Advanced experience layer */
 body{overflow-x:hidden;background:#f8f2ee}.grain{position:fixed;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E');z-index:10}.topGlow{position:fixed;width:500px;height:500px;border-radius:50%;top:-320px;right:-170px;background:radial-gradient(circle,rgba(246,170,175,.26),transparent 68%);filter:blur(10px);pointer-events:none}.appBar{position:relative;z-index:2;display:flex;align-items:center;gap:8px;margin:2px auto 25px;max-width:680px;color:#876e6e;font:700 11px 'Noto Sans Bengali';letter-spacing:1.4px;text-transform:uppercase}.brandMark{display:grid;place-items:center;width:25px;height:25px;border-radius:9px;background:#fff;color:#c17680;box-shadow:0 7px 18px rgba(100,60,60,.08)}.sessionPulse{margin-left:auto;color:#69a47f;font-size:12px;text-shadow:0 0 12px rgba(105,164,127,.6)}.heroOrb{width:105px;height:105px;margin:5px auto 20px;border-radius:38% 62% 58% 42%/43% 37% 63% 57%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#f9dcd7);box-shadow:inset 10px 10px 24px rgba(255,255,255,.8),0 25px 50px rgba(116,72,72,.12);animation:orbFloat 4s ease-in-out infinite}.heroOrb span{font-size:35px;color:#bf7b82;text-shadow:0 4px 15px rgba(190,100,110,.22)}@keyframes orbFloat{50%{transform:translateY(-7px) rotate(4deg);border-radius:58% 42% 40% 60%/55% 48% 52% 45%}}.emotion-grid{position:relative}.emotion{position:relative;overflow:hidden;min-height:132px;background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,249,246,.7));backdrop-filter:blur(12px)}.emotion:before{content:"";position:absolute;width:80px;height:80px;right:-25px;top:-25px;border-radius:50%;background:rgba(240,184,184,.13);transition:.35s}.emotion:hover:before{transform:scale(1.8)}.emotion:after{content:"↗";position:absolute;right:15px;bottom:13px;color:#b48b8b;opacity:.45;transition:.25s}.emotion:hover:after{transform:translate(3px,-3px);opacity:1}.emotion .emoji{filter:drop-shadow(0 5px 8px rgba(70,40,40,.08))}.moodHint{display:flex;align-items:center;gap:12px;margin:20px 0 0;padding:13px 15px;border:1px solid rgba(120,80,80,.08);border-radius:18px;background:rgba(255,255,255,.54)}.moodHint>span{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#f8e7e2;color:#b87980}.moodHint b,.moodHint small{display:block}.moodHint b{font-size:12px;color:#765c5c}.moodHint small{margin-top:2px;color:#a18a8a;font-size:10px}.noteAura{position:absolute;inset:20px 5%;height:220px;background:radial-gradient(circle,rgba(243,185,185,.18),transparent 68%);filter:blur(18px);z-index:-1}.paper{border:1px solid rgba(155,110,100,.1);background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(255,249,242,.93));box-shadow:0 30px 80px rgba(85,50,45,.12),inset 0 1px 0 rgba(255,255,255,.9);transform:translateZ(0)}.paper:after{content:"";position:absolute;inset:10px;border:1px solid rgba(170,120,110,.055);border-radius:20px;pointer-events:none}.note-text{min-height:150px;display:flex;align-items:center}.noteMeta{display:flex;justify-content:space-between;margin-top:20px;padding-top:13px;border-top:1px dashed rgba(130,90,90,.15);color:#ad9191;font:700 9px 'Noto Sans Bengali';letter-spacing:1.3px}.actions .primary{box-shadow:0 14px 35px rgba(75,52,53,.18)}.animation-stage{background:radial-gradient(circle at 50% 48%,#fff 0,#ffece5 43%,#f8dcd8 100%);border:1px solid rgba(180,120,120,.1)}.finalBadge{display:inline-block;margin:10px 0 9px;padding:7px 11px;border-radius:999px;background:#fff8f4;color:#b27d7e;font:800 9px 'Noto Sans Bengali';letter-spacing:1.5px;box-shadow:0 8px 20px rgba(100,60,60,.06)}.final-card{background:rgba(255,255,255,.48);padding:20px;border:1px solid rgba(150,100,100,.07);border-radius:25px}.final-card h2{font-family:'Noto Serif Bengali',serif}.primary:active,.secondary:active,.emotion:active{transform:scale(.98)}
 @media(max-width:520px){.appBar{margin-top:0}.heroOrb{width:88px;height:88px}.emotion{min-height:118px}.paper{padding:36px 22px}.note-text{min-height:170px}}
+
+
+/* ===== Premium visual refresh ===== */
+:root{
+  --ink:#382b31;
+  --muted:#806c73;
+  --rose:#bd6875;
+  --rose-soft:#f7dfe0;
+  --cream:#fffaf6;
+  --line:rgba(91,61,67,.10);
+  --shadow:0 28px 80px rgba(71,45,52,.12);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:"DM Sans","Noto Sans Bengali",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 50% 5%,rgba(255,255,255,.95),transparent 32%),
+    linear-gradient(145deg,#fff8f4 0%,#f8eef0 52%,#fffaf6 100%);
+}
+.ambient{background:
+  radial-gradient(circle at 8% 18%,rgba(255,151,173,.20),transparent 27%),
+  radial-gradient(circle at 91% 22%,rgba(218,176,255,.13),transparent 25%),
+  radial-gradient(circle at 55% 100%,rgba(255,205,155,.18),transparent 32%);
+  animation:ambientShift 12s ease-in-out infinite alternate}
+@keyframes ambientShift{to{filter:hue-rotate(12deg);transform:scale(1.04)}}
+.app{position:relative;z-index:2;padding:28px 20px}
+.screen{width:min(800px,100%);animation:premiumIn .72s cubic-bezier(.2,.8,.2,1) both}
+@keyframes premiumIn{from{opacity:0;transform:translateY(26px) scale(.975);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+.welcome-mini{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid rgba(190,115,126,.12);border-radius:999px;background:rgba(255,255,255,.58);box-shadow:0 8px 30px rgba(80,50,55,.06);font:800 9px "Manrope",sans-serif;letter-spacing:2px;color:#a47c83}
+.mini-dot{width:4px;height:4px;border-radius:50%;background:#d78994;box-shadow:0 0 10px #e7a0aa}
+.heroOrb{position:relative;width:122px;height:122px;margin:22px auto 24px;border-radius:44% 56% 60% 40%/48% 40% 60% 52%;background:linear-gradient(145deg,#fff,#f7d7da 65%,#f0c6d0);box-shadow:inset 12px 12px 30px rgba(255,255,255,.92),0 25px 60px rgba(133,77,92,.16),0 0 55px rgba(238,141,158,.18);animation:orbFloat 4.8s ease-in-out infinite}
+.heroOrb:before,.heroOrb:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.heroOrb:before{inset:-14px;border:1px solid rgba(204,117,132,.12);animation:orbit 7s linear infinite}
+.heroOrb:after{width:10px;height:10px;top:7px;right:14px;background:#fff;box-shadow:0 0 18px 5px rgba(255,255,255,.9)}
+.heroOrb span{font-size:43px;color:#c26e7b;text-shadow:0 5px 18px rgba(190,90,110,.24);animation:heartPulse 1.9s ease-in-out infinite}
+.heroOrb i{position:absolute;right:20px;bottom:22px;font-style:normal;font-size:15px;color:#fff;text-shadow:0 0 12px #d68a98;animation:twinkle 1.7s ease-in-out infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes heartPulse{50%{transform:scale(1.13)}}
+@keyframes twinkle{50%{opacity:.35;transform:scale(.65) rotate(25deg)}}
+h1,h2{font-family:"Noto Serif Bengali","Playfair Display",serif;letter-spacing:-.5px}
+h1{font-size:clamp(38px,8vw,68px);line-height:1.28;text-shadow:0 4px 25px rgba(100,60,70,.05)}
+h1 em{background:linear-gradient(90deg,#a84e61,#d17a87,#a84e61);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradientText 4s linear infinite}
+@keyframes gradientText{to{background-position:200% center}}
+.sub{font-size:15px;color:#78676e;max-width:620px}
+.name-box{max-width:550px;padding:7px;border:1px solid rgba(130,83,94,.13);background:rgba(255,255,255,.67);box-shadow:0 24px 65px rgba(81,49,57,.12),inset 0 1px 0 rgba(255,255,255,.95);border-radius:25px}
+.name-box:focus-within{border-color:rgba(190,99,115,.34);box-shadow:0 24px 70px rgba(81,49,57,.14),0 0 0 5px rgba(215,132,146,.08)}
+.name-box input{font-family:"Noto Sans Bengali",sans-serif;font-size:15px}
+.name-box button{font-family:"Manrope","Noto Sans Bengali",sans-serif;letter-spacing:.1px}
+.primary{background:linear-gradient(135deg,#493438,#6a464d);border-radius:16px;box-shadow:0 14px 30px rgba(74,48,55,.20),inset 0 1px 0 rgba(255,255,255,.15)}
+.primary:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(74,48,55,.27)}
+.hero-trust{display:flex;justify-content:center;align-items:center;gap:9px;margin:25px auto 0;color:#a38a90;font:600 10px "Manrope",sans-serif;letter-spacing:1.2px;text-transform:uppercase}
+.hero-trust span{color:#d27d89;font-size:12px}
+.signature{font-size:13px;opacity:.85}
+.floating-hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.floating-hearts span{position:absolute;bottom:-50px;color:rgba(194,105,121,.20);font-family:Georgia,serif;font-size:18px;animation:floatHeart linear infinite}
+.floating-hearts span:nth-child(1){left:8%;animation-duration:12s;animation-delay:-3s}.floating-hearts span:nth-child(2){left:22%;font-size:10px;animation-duration:9s;animation-delay:-5s}.floating-hearts span:nth-child(3){left:39%;font-size:25px;animation-duration:14s;animation-delay:-9s}.floating-hearts span:nth-child(4){left:58%;animation-duration:11s;animation-delay:-2s}.floating-hearts span:nth-child(5){left:73%;font-size:27px;animation-duration:13s;animation-delay:-7s}.floating-hearts span:nth-child(6){left:86%;animation-duration:10s;animation-delay:-4s}.floating-hearts span:nth-child(7){left:94%;font-size:15px;animation-duration:15s;animation-delay:-11s}
+@keyframes floatHeart{0%{transform:translateY(0) rotate(0);opacity:0}12%{opacity:1}85%{opacity:.7}100%{transform:translateY(-110vh) translateX(45px) rotate(35deg);opacity:0}}
+.back{font-family:"Manrope","Noto Sans Bengali",sans-serif;font-weight:700;font-size:12px}
+.eyebrow{font-family:"Manrope","Noto Sans Bengali",sans-serif;font-size:9px;letter-spacing:3.2px}
+.emotion-grid{gap:15px;margin:30px 0}
+.emotion{min-height:145px;padding:20px 19px;border-radius:23px;border:1px solid var(--line);box-shadow:0 14px 35px rgba(80,48,55,.06),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
+.emotion:hover{transform:translateY(-7px) scale(1.012);box-shadow:0 25px 55px rgba(80,48,55,.13);border-color:rgba(193,104,120,.18)}
+.emotion .emoji{font-size:31px;margin-bottom:11px}.emotion strong{font-size:19px}.emotion small{font-size:11px;line-height:1.6}
+.moodHint{background:rgba(255,255,255,.48);backdrop-filter:blur(10px)}
+.paper{border-radius:30px;padding:46px 42px;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.95)}
+.paper-mark{font-size:68px;color:#d89aa3;opacity:.75}
+.note-text{font-size:21px;line-height:2.12;color:#44363c}
+.note-sign{font-size:14px}
+.noteMeta{font-family:"Manrope",sans-serif}
+.final-card{box-shadow:0 20px 55px rgba(80,50,55,.08);backdrop-filter:blur(10px)}
+.final-card h2{font-size:34px}
+.final-card p{font-size:14px}
+.animation-stage{box-shadow:inset 0 0 100px rgba(255,160,173,.15),0 22px 60px rgba(95,52,63,.10)}
+@keyframes orbFloat{50%{transform:translateY(-9px) rotate(4deg);border-radius:58% 42% 40% 60%/55% 48% 52% 45%}}
+@media(max-width:520px){
+ .app{padding:20px 15px}.welcome-mini{font-size:8px;letter-spacing:1.5px}.heroOrb{width:96px;height:96px;margin:19px auto 20px}.heroOrb span{font-size:35px}.heroOrb i{right:15px;bottom:17px}
+ h1{font-size:clamp(35px,10vw,48px)}.sub{font-size:13px;line-height:1.85}.name-box{border-radius:21px}.emotion-grid{grid-template-columns:1fr 1fr;gap:10px}.emotion{min-height:128px;padding:16px 14px}.emotion strong{font-size:16px}.emotion small{font-size:10px}.emotion .emoji{font-size:26px}
+ .paper{padding:38px 22px}.note-text{font-size:18px;line-height:2}.final-card h2{font-size:28px}
+}
+@media(max-width:390px){.emotion-grid{grid-template-columns:1fr}.emotion{min-height:118px}}
