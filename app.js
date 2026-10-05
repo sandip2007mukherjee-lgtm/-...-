@@ -103,5 +103,36 @@ function runAnimation(){
   for(let i=0;i<45;i++){const el=document.createElement("span");el.className="particle";el.textContent=["✦","·","♡"][i%3];el.style.left=(5+Math.random()*90)+"%";el.style.setProperty("--drift",(Math.random()*100-50)+"px");el.style.animationDelay=(Math.random()*1.4)+"s";h.appendChild(el)}
   setTimeout(()=>g.classList.add("show"),850);
 }
+
+// Lightweight Web Audio sound layer: no external audio files required.
+let audioCtx=null, soundOn=localStorage.getItem("emotion-note-sound")!=="off";
+function ensureAudio(){
+  if(!soundOn) return null;
+  try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); return audioCtx;}catch{return null}
+}
+function tone(freq=520,duration=.08,type='sine',gain=.025,delay=0){
+  const ctx=ensureAudio(); if(!ctx) return;
+  const now=ctx.currentTime+delay, o=ctx.createOscillator(), g=ctx.createGain();
+  o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(Math.max(80,freq*.72),now+duration);
+  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(gain,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+duration);
+  o.connect(g).connect(ctx.destination);o.start(now);o.stop(now+duration+.02);
+}
+function clickSound(){tone(620,.07,'sine',.018)}
+function selectSound(){tone(460,.09,'triangle',.022);tone(690,.12,'sine',.016,.06)}
+function noteSound(){tone(520,.12,'sine',.018);tone(760,.18,'sine',.014,.08)}
+function finalSound(){tone(392,.16,'sine',.018);tone(523,.18,'sine',.02,.12);tone(784,.35,'sine',.018,.25)}
+function updateSoundButton(){const b=$("soundToggle");if(!b)return;b.classList.toggle('off',!soundOn);b.textContent=soundOn?'🔊 শব্দ':'🔇 শব্দ';b.setAttribute('aria-pressed',String(soundOn))}
+$("soundToggle").onclick=()=>{soundOn=!soundOn;localStorage.setItem("emotion-note-sound",soundOn?'on':'off');if(soundOn) clickSound();updateSoundButton()};
+updateSoundButton();
+document.addEventListener('pointerdown',()=>{if(soundOn)ensureAudio()},{once:true});
+const _selectEmotion=selectEmotion;
+selectEmotion=async function(id){selectSound();return _selectEmotion(id)};
+const _generateNote=generateNote;
+generateNote=async function(){noteSound();return _generateNote()};
+$("startBtn").addEventListener('click',clickSound);
+$("anotherBtn").addEventListener('click',clickSound);
+$("heartBtn").addEventListener('click',finalSound);
+$("againBtn").addEventListener('click',clickSound);
+
 renderEmotions(); updatePresence({lastAction:"opened"});
 window.addEventListener("pagehide",()=>updatePresence({online:false,lastAction:"left_page"}));

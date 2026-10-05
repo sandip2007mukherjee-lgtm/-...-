@@ -7,20 +7,17 @@
   <title>একটু তোমার জন্য 🌙</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Galada&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="ambient"></div>
   <div class="topGlow"></div>
   <div class="grain"></div>
-  <div class="floating-hearts" aria-hidden="true">
-    <span>♡</span><span>✦</span><span>♡</span><span>·</span><span>♡</span><span>✧</span><span>♡</span>
-  </div>
+  <button id="soundToggle" class="sound-toggle" type="button" aria-label="শব্দ চালু বা বন্ধ">🔊 শব্দ</button>
   <main class="app">
     <section id="welcome" class="screen active">
-      <div class="welcome-mini"><span class="mini-dot"></span> A LITTLE MOMENT FOR YOU <span class="mini-dot"></span></div>
-      <div class="heroOrb"><span>♡</span><i>✦</i></div>
+      <div class="heroOrb"><span>✦</span></div>
       <p class="eyebrow">A little note, just for you</p>
       <h1>আজ তোমার মনের কথাটা<br><em>একটু বলবে?</em></h1>
       <p class="sub">তোমার নামটা লিখে শুরু করো। তারপর তোমার অনুভূতির জন্য একটা ছোট্ট কথা অপেক্ষা করছে।</p>
@@ -28,8 +25,8 @@
         <input id="nameInput" maxlength="30" autocomplete="name" placeholder="তোমার নাম..." />
         <button id="startBtn">শুরু করি <span>→</span></button>
       </div>
-      <div class="hero-trust"><span>✦</span> made with a little warmth <span>♡</span></div>
       <p class="signature">— Sandip ♡</p>
+      <p class="sound-hint">শুরু করলে ছোট্ট কিছু sound effect শোনা যাবে ✨</p>
     </section>
 
     <section id="emotions" class="screen">
