@@ -7,14 +7,11 @@
   <title>একটু তোমার জন্য 🌙</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Galada&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="ambient"></div>
-  <div class="topGlow"></div>
-  <div class="grain"></div>
-  <button id="soundToggle" class="sound-toggle" type="button" aria-label="শব্দ চালু বা বন্ধ">🔊 শব্দ</button>
+  <div class="ambient"></div><div class="cursorGlow" id="cursorGlow"></div><div class="floaters" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <main class="app">
     <section id="welcome" class="screen active">
       <div class="heroOrb"><span>✦</span></div>
@@ -23,10 +20,9 @@
       <p class="sub">তোমার নামটা লিখে শুরু করো। তারপর তোমার অনুভূতির জন্য একটা ছোট্ট কথা অপেক্ষা করছে।</p>
       <div class="name-box">
         <input id="nameInput" maxlength="30" autocomplete="name" placeholder="তোমার নাম..." />
-        <button id="startBtn">শুরু করি <span>→</span></button>
+        <button id="startBtn" class="magnetic">শুরু করি <span>→</span></button>
       </div>
       <p class="signature">— Sandip ♡</p>
-      <p class="sound-hint">শুরু করলে ছোট্ট কিছু sound effect শোনা যাবে ✨</p>
     </section>
 
     <section id="emotions" class="screen">
@@ -51,8 +47,8 @@
         <p id="noteSign" class="note-sign">— Sandip ♡</p>
       </div>
       <div class="actions">
-        <button id="anotherBtn" class="secondary">আরও একটা কথা শুনি ✨</button>
-        <button id="heartBtn" class="primary">এইটুকু আমার জন্য →</button>
+        <button id="anotherBtn" class="secondary magnetic">আরও একটা কথা শুনি ✨</button>
+        <button id="heartBtn" class="primary magnetic">এইটুকু আমার জন্য →</button>
       </div>
       <p id="aiStatus" class="tiny"></p>
     </section>
@@ -68,7 +64,7 @@
         <p class="eyebrow">শুধু তোমার জন্য</p>
         <h2 id="finalTitle"></h2>
         <p id="finalText"></p>
-        <button id="againBtn" class="primary">আবার শুরু করি ↺</button>
+        <button id="againBtn" class="primary magnetic">আবার শুরু করি ↺</button>
       </div>
     </section>
   </main>

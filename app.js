@@ -28,7 +28,7 @@ const emotions=[
 
 let state={name:"",emotion:null,noteCount:0,sessionId:crypto.randomUUID?.()||String(Date.now()),shownNotes:new Set(),lastNoteId:null};
 const $=id=>document.getElementById(id);
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});}
+function show(id){const current=document.querySelector(".screen.active");if(current&&current.id!==id){current.classList.add("leaving");setTimeout(()=>current.classList.remove("leaving"),420)}document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));const next=$(id);next.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});setTimeout(()=>next.querySelector(".paper")?.classList.add("reveal"),40);}
 function clean(n){return n.replace(/[<>]/g,"").trim().slice(0,30);}
 async function logEvent(event,extra={}){
   try{await addDoc(collection(db,"activity"),{sessionId:state.sessionId,name:state.name||null,event,emotion:state.emotion?.id||null,emotionLabel:state.emotion?.title||null,noteCount:state.noteCount,currentScreen:document.querySelector(".screen.active")?.id||null,...extra,createdAt:serverTimestamp()});}catch(e){console.warn("activity",e)}
@@ -75,16 +75,21 @@ async function generateNote(){
   state.noteCount++;
   $("noteText").textContent="তোমার জন্য নতুন একটা কথা খুঁজছি…";
   const note=await getRandomNote();
-  $("noteText").textContent=note;
+  const target=$("noteText");target.classList.add("typing");target.textContent="";let i=0;const typeNext=()=>{if(i<note.length){target.textContent+=note[i++];setTimeout(typeNext,Math.min(26,7+Math.random()*22))}else target.classList.remove("typing")};typeNext();playTone("select");
   $("aiStatus").textContent=`নতুন কথা #${state.noteCount} • random ✨`; $("noteCounter").textContent=`NOTE ${String(state.noteCount).padStart(2,"0")}`;
   await logEvent("note_viewed",{note, noteId:state.lastNoteId});
   await updatePresence({lastAction:"note_viewed",noteCount:state.noteCount});
 }
+
+function playTone(type="click"){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;window.__audio=window.__audio||new AC();const ac=window.__audio;if(ac.state==='suspended')ac.resume();const o=ac.createOscillator(),g=ac.createGain(),now=ac.currentTime,map={click:[520,.045],select:[660,.08],success:[880,.14],back:[360,.05]},v=map[type]||map.click; o.frequency.setValueAtTime(v[0],now);o.frequency.exponentialRampToValueAtTime(v[0]*1.08,now+v[1]);o.type='sine';g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.035,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+v[1]);o.connect(g);g.connect(ac.destination);o.start(now);o.stop(now+v[1]+.02)}catch(e){}}
+function ripple(btn,e){const r=document.createElement('span');r.className='ripple';const b=btn.getBoundingClientRect(),x=(e.clientX??b.left+b.width/2)-b.left,y=(e.clientY??b.top+b.height/2)-b.top,size=Math.max(b.width,b.height)*.7;r.style.width=r.style.height=size+'px';r.style.left=(x-size/2)+'px';r.style.top=(y-size/2)+'px';btn.appendChild(r);setTimeout(()=>r.remove(),700)}
+function initInteractions(){const glow=$("cursorGlow");window.addEventListener('pointermove',e=>{if(glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'}const card=e.target.closest('.emotion,.paper,.heroOrb,.animation-stage');if(card){const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateX(${-y*4}deg) rotateY(${x*5}deg) translateY(-2px)`;card.style.setProperty('--rx',(x+.5)*100+'%');card.style.setProperty('--ry',(y+.5)*100+'%')}});document.addEventListener('pointerout',e=>{const card=e.target.closest('.emotion,.paper,.heroOrb,.animation-stage');if(card&&!card.contains(e.relatedTarget))card.style.transform=''});document.querySelectorAll('button').forEach(btn=>btn.addEventListener('pointerdown',e=>{ripple(btn,e);playTone('click')}));document.querySelectorAll('.magnetic').forEach(btn=>btn.addEventListener('pointermove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-(r.left+r.width/2))*.08}px,${(e.clientY-(r.top+r.height/2))*.08}px)`}));document.querySelectorAll('.magnetic').forEach(btn=>btn.addEventListener('pointerleave',()=>btn.style.transform=''))}
 function renderEmotions(){
   $("emotionGrid").innerHTML=emotions.map(e=>`<button class="emotion" data-id="${e.id}"><span class="emoji">${e.emoji}</span><strong>${e.title}</strong><small>${e.sub}</small></button>`).join("");
   document.querySelectorAll(".emotion").forEach(b=>b.onclick=()=>selectEmotion(b.dataset.id));
 }
 async function selectEmotion(id){
+  playTone("success");
   state.emotion=emotions.find(e=>e.id===id); state.shownNotes.clear(); state.noteCount=0;
   $("emotionBadge").textContent=state.emotion.emoji+" "+state.emotion.title;
   $("noteGreeting").textContent=state.name+"—";
@@ -103,36 +108,5 @@ function runAnimation(){
   for(let i=0;i<45;i++){const el=document.createElement("span");el.className="particle";el.textContent=["✦","·","♡"][i%3];el.style.left=(5+Math.random()*90)+"%";el.style.setProperty("--drift",(Math.random()*100-50)+"px");el.style.animationDelay=(Math.random()*1.4)+"s";h.appendChild(el)}
   setTimeout(()=>g.classList.add("show"),850);
 }
-
-// Lightweight Web Audio sound layer: no external audio files required.
-let audioCtx=null, soundOn=localStorage.getItem("emotion-note-sound")!=="off";
-function ensureAudio(){
-  if(!soundOn) return null;
-  try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); return audioCtx;}catch{return null}
-}
-function tone(freq=520,duration=.08,type='sine',gain=.025,delay=0){
-  const ctx=ensureAudio(); if(!ctx) return;
-  const now=ctx.currentTime+delay, o=ctx.createOscillator(), g=ctx.createGain();
-  o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(Math.max(80,freq*.72),now+duration);
-  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(gain,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+duration);
-  o.connect(g).connect(ctx.destination);o.start(now);o.stop(now+duration+.02);
-}
-function clickSound(){tone(620,.07,'sine',.018)}
-function selectSound(){tone(460,.09,'triangle',.022);tone(690,.12,'sine',.016,.06)}
-function noteSound(){tone(520,.12,'sine',.018);tone(760,.18,'sine',.014,.08)}
-function finalSound(){tone(392,.16,'sine',.018);tone(523,.18,'sine',.02,.12);tone(784,.35,'sine',.018,.25)}
-function updateSoundButton(){const b=$("soundToggle");if(!b)return;b.classList.toggle('off',!soundOn);b.textContent=soundOn?'🔊 শব্দ':'🔇 শব্দ';b.setAttribute('aria-pressed',String(soundOn))}
-$("soundToggle").onclick=()=>{soundOn=!soundOn;localStorage.setItem("emotion-note-sound",soundOn?'on':'off');if(soundOn) clickSound();updateSoundButton()};
-updateSoundButton();
-document.addEventListener('pointerdown',()=>{if(soundOn)ensureAudio()},{once:true});
-const _selectEmotion=selectEmotion;
-selectEmotion=async function(id){selectSound();return _selectEmotion(id)};
-const _generateNote=generateNote;
-generateNote=async function(){noteSound();return _generateNote()};
-$("startBtn").addEventListener('click',clickSound);
-$("anotherBtn").addEventListener('click',clickSound);
-$("heartBtn").addEventListener('click',finalSound);
-$("againBtn").addEventListener('click',clickSound);
-
-renderEmotions(); updatePresence({lastAction:"opened"});
+renderEmotions(); initInteractions(); updatePresence({lastAction:"opened"});
 window.addEventListener("pagehide",()=>updatePresence({online:false,lastAction:"left_page"}));
