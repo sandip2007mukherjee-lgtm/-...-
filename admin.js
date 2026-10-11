@@ -33,7 +33,13 @@ $("noteForm").onsubmit=saveNote;
 $("seedBtn").onclick=seedAllNotes;
 $("addEmotionBtn").onclick=addEmotion;
 $("liveToggle").onclick=()=>toggleLive();
+$("adminSearch").addEventListener("input",applyDashboardSearch);
+$("exportActivity").onclick=()=>exportCSV("emotion-note-activity.csv",[["User","Emotion","Action","Time","Session"],...activities.map(x=>[x.name||"Anonymous",x.emotionLabel||x.emotion||"",eventLabel(x.event),fmt(x.createdAt),x.sessionId||""])]);
+$("exportUsers").onclick=()=>exportCSV("emotion-note-users.csv",[["User","Emotion","Current screen","Status","Last seen","Session"],...[...usersMap.values()].map(u=>[u.name||"Anonymous",u.emotionLabel||u.emotion||"",u.currentScreen||"",isLive(u)?"Live":"Offline",fmt(u.lastSeen||u.createdAt),u.sessionId||""])]);
+document.addEventListener("keydown",e=>{if(e.key==="/"&&!/input|textarea|select/i.test(document.activeElement.tagName)){e.preventDefault();$("adminSearch").focus()}if(e.key==="Escape"){$("adminSearch").value="";applyDashboardSearch();$("userModal").classList.add("hidden");$("noteModal").classList.add("hidden")}});
 
+function applyDashboardSearch(){const q=$("adminSearch").value.trim().toLocaleLowerCase();[...$("activityBody").rows,...$("userBody").rows].forEach(row=>{row.hidden=!!q&&!row.innerText.toLocaleLowerCase().includes(q)});}
+function exportCSV(filename,rows){const csv=rows.map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
 function switchTab(tab){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id==="view-"+tab));if(tab==="notes")loadNotes();}
 async function loadSettings(){const s=await getDoc(doc(db,"settings","main"));if(s.exists()){const d=s.data();$("finalMessage").value=d.finalMessage||"";$("intensity").value=d.animationIntensity||"high";$("allowAnimation").checked=d.allowAnimation!==false;$("siteTitle").value=d.siteTitle||"একটু তোমার জন্য";}}
 async function saveSettings(){await setDoc(doc(db,"settings","main"),{finalMessage:$("finalMessage").value.trim(),animationIntensity:$("intensity").value,allowAnimation:$("allowAnimation").checked,siteTitle:$("siteTitle").value.trim(),updatedAt:serverTimestamp()},{merge:true});$("saveMsg").textContent="Settings saved ✓";setTimeout(()=>$("saveMsg").textContent="",1800)}
@@ -60,6 +66,7 @@ function renderAll(){
   const liveSorted=[...users.values()].sort((a,b)=>(b.lastSeen?.toMillis?.()||0)-(a.lastSeen?.toMillis?.()||0));
   $("userBody").innerHTML=liveSorted.map(u=>`<tr><td><button class="userLink" data-session="${esc(u.sessionId)}">${esc(u.name||"Anonymous")}</button></td><td>${esc(u.emotionLabel||u.emotion||"-")}</td><td>${esc(u.currentScreen||"-")}</td><td>${isLive(u)?"<span class='livePill'>● LIVE</span>":"Offline"}</td><td>${fmt(u.lastSeen||u.createdAt)}</td></tr>`).join("")||`<tr><td colspan="5">No users yet.</td></tr>`;
   document.querySelectorAll("#userBody .userLink").forEach(b=>b.onclick=()=>openUser(b.dataset.session));
+  $("lastUpdated").textContent="SYNCED " + new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});applyDashboardSearch();
 }
 function isLive(x){const t=x.lastSeen?.toMillis?.()||0;return t&&Date.now()-t<45000&&x.online!==false}
 function eventLabel(e){return ({name_submitted:"নাম দিয়েছে",emotion_selected:"Emotion বেছে নিয়েছে",note_viewed:"Note দেখেছে",animation_triggered:"Final button",back_pressed:"Back চাপেছে",again_pressed:"আবার শুরু"}[e]||e||"-")}
