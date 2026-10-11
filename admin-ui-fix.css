@@ -1,0 +1,118 @@
+/* Emotion Note Admin UI Fix — glass dashboard + responsive tables */
+:root {
+  --admin-ink: #111827;
+  --admin-violet: #5b3df5;
+  --admin-cyan: #00a6c7;
+  --admin-glass: rgba(255,255,255,.78);
+  --admin-border: rgba(255,255,255,.9);
+  --admin-shadow: 0 18px 50px rgba(17,24,39,.08);
+}
+html { scroll-behavior: smooth; }
+body {
+  color: var(--admin-ink);
+  background-color: #f4f6fb;
+  background-image:
+    radial-gradient(ellipse at 12% 8%, rgba(91,61,245,.11), transparent 32%),
+    radial-gradient(ellipse at 90% 82%, rgba(0,166,199,.10), transparent 30%);
+  font-family: "Noto Sans Bengali", Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.card, .panel, .stat, .noteStat, .modalCard, .login {
+  background: var(--admin-glass);
+  border: 1px solid var(--admin-border);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+  backdrop-filter: blur(22px) saturate(145%);
+  box-shadow: var(--admin-shadow), inset 0 1px rgba(255,255,255,.8);
+  border-radius: 20px;
+}
+.top { border-bottom-color: rgba(91,61,245,.12); }
+.brand, .eyebrow, .sectionKicker { color: var(--admin-violet); }
+.hero h2, .panel h3, .login h1 { color: var(--admin-ink); }
+.hero p, .panel p, .login p, .stat span, .stat small { color: #475569; }
+.primary, .login button:not(.linkBtn) {
+  background: var(--admin-violet);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.24);
+  box-shadow: 0 10px 26px rgba(91,61,245,.2);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.primary:hover, .login button:not(.linkBtn):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 34px rgba(91,61,245,.28);
+}
+.ghost, .secondary, .noteStat button, .rowActions button, .manageRow button {
+  background: rgba(91,61,245,.08);
+  color: #4931d2;
+  border: 1px solid rgba(91,61,245,.16);
+  border-radius: 12px;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.ghost:hover, .secondary:hover, .smallAction:hover {
+  transform: translateY(-1px);
+  border-color: var(--admin-cyan);
+}
+.liveSwitch, .commandSearch, .tableWrap {
+  border-color: rgba(91,61,245,.14);
+  background: rgba(255,255,255,.58);
+}
+.tab.active {
+  color: var(--admin-violet);
+  box-shadow: inset 0 -3px var(--admin-violet);
+}
+.statusBadge, .livePill, .eventTag, .miniBadge {
+  border-color: rgba(0,166,199,.22);
+  background: rgba(0,166,199,.09);
+  color: #006d84;
+}
+.dashboardStats .stat:nth-child(2) { border-color: rgba(0,166,199,.35); }
+.dashboardStats .stat:nth-child(2) b { color: #007e98; }
+.dashboardStats .stat:nth-child(3) b { color: var(--admin-violet); }
+.userLink, .linkBtn, .modalClose { color: var(--admin-violet); }
+input, textarea, select {
+  max-width: 100%;
+  border: 1px solid rgba(71,85,105,.24);
+  border-radius: 12px;
+  color: var(--admin-ink);
+  background: rgba(255,255,255,.82);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--admin-violet);
+  box-shadow: 0 0 0 3px rgba(91,61,245,.12);
+}
+button:focus-visible, a:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  outline: 3px solid var(--admin-cyan);
+  outline-offset: 3px;
+}
+tbody tr:hover { background: rgba(0,166,199,.045); }
+.modal { background: rgba(15,23,42,.48); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.modalCard { background: rgba(255,255,255,.94); }
+@media (max-width: 760px) {
+  .top { padding: 22px 16px 16px; }
+  .topActions { flex-wrap: wrap; gap: 8px; }
+  .tabs { padding: 0 12px; gap: 4px; overflow-x: auto; }
+  .tab { white-space: nowrap; padding: 12px 13px; }
+  .commandBar { padding: 0 14px; flex-direction: column; align-items: stretch; }
+  .commandSearch { width: 100%; min-width: 0; }
+  main { padding: 18px 14px 44px; }
+  .panel { padding: 16px; }
+  .panelHead { align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+  .panelTools { flex-wrap: wrap; }
+  .dashboardStats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .dashboardStats .stat { min-width: 0; padding: 15px; }
+  .dashboardStats .stat b { font-size: 30px; }
+  .tableWrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { min-width: 620px; }
+  .settingsGrid { grid-template-columns: 1fr; }
+  .login { width: min(100% - 28px, 440px); }
+}
+@media (max-width: 420px) {
+  .dashboardStats { grid-template-columns: 1fr; }
+  .top h1 { font-size: 27px; }
+  .panel { border-radius: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

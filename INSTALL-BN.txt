@@ -1,0 +1,17 @@
+Emotion Note — UI Fix Overlay
+
+এই ZIP-টি পুরো repository backup নয়; এটি UI polish-এর জন্য ২টি CSS override ফাইল।
+
+ফাইল:
+- emotion-note-ui-fix.css — main Emotion Note page
+- admin-ui-fix.css — admin dashboard
+
+GitHub-এ upload করার পর:
+1. Repository root-এ এই দুটি CSS file যোগ করুন।
+2. index.html-এর </head>-এর আগে এই লাইন যোগ করুন:
+   <link rel="stylesheet" href="emotion-note-ui-fix.css">
+3. admin.html-এর </head>-এর আগে এই লাইন যোগ করুন:
+   <link rel="stylesheet" href="admin-ui-fix.css">
+4. Commit করুন, তারপর সাইট reload করুন (প্রয়োজনে browser cache refresh করুন)।
+
+এগুলো existing app.js/admin.js/Firebase logic পরিবর্তন করে না।
